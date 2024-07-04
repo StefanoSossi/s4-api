@@ -4,13 +4,13 @@ using s4.Logic.Models.Validation;
 
 namespace s4.Logic.Models
 {
-    public class StudentDto : ValidationData, IValidation 
+    public class ClassDto : ValidationData, IValidation 
     {
         public Guid Code { get; set; }
         public required string Title { get; set; }
         public string? Description { get; set; }
 
-        public ICollection<StudentClass>? StudentClasses { get; set; }
+        public IEnumerable<StudentDto> Students { get; set; }
 
         public override bool IsValid()
         {
