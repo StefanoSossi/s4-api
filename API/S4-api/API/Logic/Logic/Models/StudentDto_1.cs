@@ -4,7 +4,7 @@ using s4.Logic.Models.Validation;
 
 namespace s4.Logic.Models
 {
-    public class ClassDto : ValidationData, IValidation 
+    public class StudentDto : ValidationData, IValidation 
     {
         public Guid Code { get; set; }
         public required string Title { get; set; }

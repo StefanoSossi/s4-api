@@ -1,22 +1,17 @@
-﻿using s4.Data.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using s4.Logic.Models;
 
-namespace Logic.Managers.Interfaces
+namespace s4.Logic.Managers.Interfaces
 {
     internal interface IClassesManager
     {
-        Task<Class> CreateClass(CommentDto commentDto);
+        Task<IEnumerable<StudentDto>> GetAll();
+        Task<StudentDto> GetById(Guid id);
+        Task<StudentDto> Create(StudentDto newClass);
+        Task<StudentDto> Update(StudentDto clasUpdated, Guid id);
+        Task<bool> Delete(Guid classId);
+        Task<StudentDto> AddStudent(Guid classId, Guid studentId);
+        Task<StudentDto> RemoveStudent(Guid classId, Guid studentId);
+        Task<StudentDto> GetAllStudents(Guid classId, Guid studentId);
 
-        Task<IEnumerable<CommentDto>> GetAllCommentsByPostId(Guid postId);
-
-        Task<CommentDto> GetCommentByIdAndPostId(Guid postId, Guid id);
-
-        Task<CommentDto> UpdateCommentByPostId(Guid postId, Guid id, Guid userId, CommentDto commentDto);
-
-        Task<bool> DeleteByIdAndPostId(Guid postId, Guid id);
     }
 }
