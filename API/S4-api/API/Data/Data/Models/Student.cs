@@ -4,21 +4,18 @@ using System.ComponentModel.DataAnnotations;
 
 namespace s4.Data.Models
 {
-    public class Student
+    public class Student : Entity
     {
-        [Key]
-        [Required]
-        public Guid Id { get; set; }
 
         [Required]
         [StringLength(350)]
-        public string LastName { get; set; }
+        public string? LastName { get; set; }
 
         [Required]
         [StringLength(350)]
-        public string FirstName { get; set; }
+        public required string FirstName { get; set; }
 
-        public ICollection<StudentClass> StudentClasses { get; set; }
+        public ICollection<StudentClass>? StudentClasses { get; set; }
 
     }
 }
