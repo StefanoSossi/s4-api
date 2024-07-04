@@ -1,4 +1,4 @@
-﻿namespace s4.Logic
+﻿namespace s4.Logic.Managers
 {
     public class Logic
     {
