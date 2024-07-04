@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "tsLfVOISuOANVEN75S2AIfsd1jWZk0sPSBtd11mpRiwoFdEx5vznyrd20dbpoki3ZxqyYOw2zUK/DVQuQ0y2xA==",
+  "dgSpecHash": "jufb+lsI8qacgtaGcopzFV8ZjFTZ/rINAFkRBE1jY1Mv++oUvUuH+8xoLuJFdL6RoMahRunh2juqohxaHvSNrg==",
   "success": true,
   "projectFilePath": "D:\\TestCode\\API\\S4-api\\API\\Presentation\\Presentation.csproj",
   "expectedPackageFiles": [
@@ -49,6 +49,7 @@
     "C:\\Users\\stefano.sossi\\.nuget\\packages\\microsoft.sqlserver.server\\1.0.0\\microsoft.sqlserver.server.1.0.0.nupkg.sha512",
     "C:\\Users\\stefano.sossi\\.nuget\\packages\\microsoft.win32.systemevents\\6.0.0\\microsoft.win32.systemevents.6.0.0.nupkg.sha512",
     "C:\\Users\\stefano.sossi\\.nuget\\packages\\mono.texttemplating\\2.2.1\\mono.texttemplating.2.2.1.nupkg.sha512",
+    "C:\\Users\\stefano.sossi\\.nuget\\packages\\serilog\\4.0.0\\serilog.4.0.0.nupkg.sha512",
     "C:\\Users\\stefano.sossi\\.nuget\\packages\\swashbuckle.aspnetcore\\6.6.2\\swashbuckle.aspnetcore.6.6.2.nupkg.sha512",
     "C:\\Users\\stefano.sossi\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.6.2\\swashbuckle.aspnetcore.swagger.6.6.2.nupkg.sha512",
     "C:\\Users\\stefano.sossi\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.6.2\\swashbuckle.aspnetcore.swaggergen.6.6.2.nupkg.sha512",
