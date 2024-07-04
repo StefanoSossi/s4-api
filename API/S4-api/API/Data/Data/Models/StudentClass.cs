@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace s4.Data.Models
 {
-    public class StudentClass
+    public class StudentClass : Entity
     {
         public Guid StudentId { get; set; }
         public Student Student { get; set; }

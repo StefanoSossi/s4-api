@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using s4.Data.Repository;
 using s4.Data.Repository.Generic;
 using Serilog;
+using System.Text.RegularExpressions;
 
 namespace s4.Data
 {
@@ -8,7 +10,19 @@ namespace s4.Data
     {
         private readonly S4DBContext _S4DBContext;
 
-        public void BeginTransaction()
+        private readonly ClassRepository _classRepository;
+
+        private readonly StudentRepository _studentRepository; 
+
+        private readonly StudentClassRepository _studentClassRepository;
+
+        public UnitOfWork(S4DBContext dbContext)
+        {
+            _classRepository = new ClassRepository(_S4DBContext);
+            _studentRepository = new StudentRepository(_S4DBContext);
+            _studentClassRepository = new StudentClassRepository(_S4DBContext);
+        }
+            public void BeginTransaction()
         {
             _S4DBContext.Database.BeginTransaction();
         }
@@ -51,6 +65,21 @@ namespace s4.Data
                 Log.Error(ex, $"{message}{Environment.NewLine} Stack trace: {Environment.NewLine}");
                 throw new DatabaseException("Can not save changes, error in Database", ex.InnerException);
             }
+        }
+
+        public StudentClassRepository StudentClassRepository
+        {
+            get { return _studentClassRepository; }
+        }
+
+        public ClassRepository ClassRepository
+        {
+            get { return _classRepository; }
+        }
+
+        public StudentRepository StudentRepository
+        {
+            get { return _studentRepository; }
         }
     }
 }
