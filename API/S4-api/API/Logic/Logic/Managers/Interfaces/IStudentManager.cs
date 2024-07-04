@@ -2,15 +2,15 @@
 
 namespace Logic.Managers.Interfaces
 {
-    internal interface IStudentManager
+    public interface IStudentManager
     {
         Task<IEnumerable<StudentDto>> GetAll();
         Task<StudentDto> GetById(Guid id);
-        Task<StudentDto> Create(StudentDto newStudent);
-        Task<StudentDto> Update(StudentDto clasUpdated, Guid id);
+        Task<StudentDto> Create(StudentDto studentDto);
+        Task<StudentDto> Update(StudentDto studentDto, Guid id);
         Task<bool> Delete(Guid studentId);
         Task<StudentDto> AddClass(Guid classId, Guid studentId);
         Task<StudentDto> RemoveClass(Guid classId, Guid studentId);
-        Task<StudentDto> GetAllClasses(Guid classId, Guid studentId);
+        Task<IEnumerable<ClassDto>> GetAllClasses(Guid studentId);
     }
 }
