@@ -2,12 +2,9 @@ using AutoMapper;
 using Moq;
 using s4.Data;
 using s4.Data.Models;
-using s4.Data.Repository.Interfaces;
-using s4.Data.Repository.Generic;
 using s4.Logic.Managers;
 using s4.Logic.Managers.Interfaces;
 using s4.Logic.Models;
-using s4.Data.Repository;
 
 namespace s4.Tests
 {
