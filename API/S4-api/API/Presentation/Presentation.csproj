@@ -16,6 +16,6 @@
 	  <ProjectReference Include="..\Configuration\Configuration\Configuration.csproj" />
 	  <ProjectReference Include="..\Logic\Logic\Logic.csproj" />
 	  <ProjectReference Include="..\Data\Data\Data.csproj" />
-  </ItemGroup>
+  </ItemGroup> 
 
 </Project>
