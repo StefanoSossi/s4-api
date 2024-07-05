@@ -1,6 +1,9 @@
 using Microsoft.OpenApi.Models;
 using s4.Configuration;
 using s4.Data;
+using s4.Logic.Managers;
+using s4.Logic.Managers.Interfaces;
+using s4.Logic.Models.Mapper;
 
 namespace s4.Presentation
 {
@@ -24,10 +27,14 @@ namespace s4.Presentation
                         .WithExposedHeaders("Authorization")
                 );
             });
-            builder.Services.AddDbContext<S4DBContext>();
+            builder.Services.AddAutoMapper(typeof(MapperProfile));
+            builder.Services.AddDbContext<S4DBContext>(); 
+            builder.Services.AddTransient<IStudentManager, StudentsManager>();
+            builder.Services.AddTransient<IClassesManager, ClassesManager>();
             builder.Services.AddTransient<IApplicationConfiguration, ApplicationConfiguration>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddControllers();
             builder.Services.AddSwaggerGen(options =>
             {
                 options.SwaggerDoc("v1", new OpenApiInfo
