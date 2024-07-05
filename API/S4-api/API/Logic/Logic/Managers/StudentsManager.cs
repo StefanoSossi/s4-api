@@ -3,7 +3,6 @@ using s4.Logic.Managers.Interfaces;
 using s4.Data;
 using s4.Data.Models;
 using s4.Logic.Models;
-using System.Text.RegularExpressions;
 
 namespace s4.Logic.Managers
 {
@@ -71,7 +70,7 @@ namespace s4.Logic.Managers
         {
             Student student = await _uow.StudentRepository.GetByIdAsync(studentId)
                 ?? throw new Exception($"Student with ID {studentId} not found");
-            Class classItem = await _uow.ClassRepository.GetByIdAsync(classId)
+            _ = await _uow.ClassRepository.GetByIdAsync(classId)
                 ?? throw new Exception($"Class with ID {classId} not found");
             StudentClass newStudentClass = new()
             {
@@ -96,7 +95,7 @@ namespace s4.Logic.Managers
         }
         public async Task<IEnumerable<ClassDto>> GetAllClasses(Guid studentId)
         {
-            Student student = await _uow.StudentRepository.GetByIdAsync(studentId)
+            _ = await _uow.StudentRepository.GetByIdAsync(studentId)
                 ?? throw new Exception($"Student with ID {studentId} not found");
             return await RetriveClassesOfStudent(studentId);
         }
@@ -107,8 +106,8 @@ namespace s4.Logic.Managers
             List<ClassDto> classes = [];
             foreach (StudentClass studentClass in studentClasses)
             {
-                /*ClassDto classdto = await _classesManager.GetById(studentClass.ClassId);
-                classes.Add(classdto);*/
+                ClassDto classDto = await _classesManager.GetById(studentClass.ClassId);
+                classes.Add(classDto);
             }
             return classes;
         }
