@@ -4,6 +4,7 @@ using s4.Data;
 using s4.Logic.Managers;
 using s4.Logic.Managers.Interfaces;
 using s4.Logic.Models.Mapper;
+using System.Reflection;
 
 namespace s4.Presentation
 {
@@ -47,7 +48,12 @@ namespace s4.Presentation
                         Name = builder.Configuration.GetSection("S4APIInfo")["Contact:Name"],
                         Email = builder.Configuration.GetSection("S4APIInfo")["Contact:Email"]
                     }
+
                 });
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                options.IncludeXmlComments(xmlPath);
             });
 
 
