@@ -8,8 +8,6 @@ namespace s4.Logic.Models
         public string? LastName { get; set; }
         public required string FirstName { get; set; }
 
-        public IEnumerable<ClassDto>? Classes { get; set; }
-
         public override bool IsValid()
         {
             if (FirstName == null)
