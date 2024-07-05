@@ -30,14 +30,14 @@ namespace s4.Tests
             var classId2 = Guid.NewGuid();
             var classes = new List<Class>
             {
-                new Class { Id = classId1, Title = "Title1", Code = classId1 },
-                new Class { Id = classId2, Title = "Title2", Code = classId2 },
+                new Class { Id = classId1, Title = "Title1", Code = "classId1" },
+                new Class { Id = classId2, Title = "Title2", Code = "classId2" },
             };
 
             var classesDto = new List<ClassDto>
             {
-                new ClassDto { Id = classId1, Title = "Title1", Code = classId1 },
-                new ClassDto { Id = classId2, Title = "Title2", Code = classId2 },
+                new ClassDto { Id = classId1, Title = "Title1", Code = "classId1" },
+                new ClassDto { Id = classId2, Title = "Title2", Code = "classId2" },
             };
 
             _mockUow.Setup(uow => uow.ClassRepository.GetAllAsync()).ReturnsAsync(classes);
@@ -53,8 +53,8 @@ namespace s4.Tests
         public async Task GetById_ShouldReturnClassWithStudents_WhenClassExists()
         {
             var classId = Guid.NewGuid();
-            var classItem = new Class { Id = classId, Title = "Title2", Code = classId };
-            var classDto = new ClassDto { Id = classId, Title = "Title1", Code = classId };
+            var classItem = new Class { Id = classId, Title = "Title2", Code = "classId" };
+            var classDto = new ClassDto { Id = classId, Title = "Title1", Code = "classId" };
          
             _mockUow.Setup(uow => uow.ClassRepository.GetByIdAsync(classId)).ReturnsAsync(classItem);
             _mockMapper.Setup(m => m.Map<ClassDto>(classItem)).Returns(classDto);
