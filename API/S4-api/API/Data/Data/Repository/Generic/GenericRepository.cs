@@ -37,12 +37,12 @@ namespace s4.Data.Repository.Generic
 
         public async Task<IEnumerable<T>> GetAllAsync()
         {
-            var asd = dbContext.Set<T>();
-            List<T> values = await asd.ToListAsync();
+            var elements = dbContext.Set<T>();
+            List<T> values = await elements.ToListAsync();
             return values;
         }
 
-        public async Task<T> GetByIdAsync(Guid id)
+        public async Task<T?> GetByIdAsync(Guid id)
         {
             T value = await dbContext.Set<T>().FindAsync(id);
             return value;

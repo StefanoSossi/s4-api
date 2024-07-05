@@ -2,27 +2,28 @@
 using s4.Data.Repository;
 using s4.Data.Repository.Generic;
 using Serilog;
-using System.Text.RegularExpressions;
+using s4.Data.Repository.Interfaces;
 
 namespace s4.Data
 {
-    public class UnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
         private readonly S4DBContext _S4DBContext;
 
-        private readonly ClassRepository _classRepository;
+        private readonly IClassRepository _classRepository;
 
-        private readonly StudentRepository _studentRepository; 
+        private readonly IStudentRepository _studentRepository; 
 
-        private readonly StudentClassRepository _studentClassRepository;
+        private readonly IStudentClassRepository _studentClassRepository;
 
         public UnitOfWork(S4DBContext dbContext)
         {
+            _S4DBContext = dbContext;
             _classRepository = new ClassRepository(_S4DBContext);
             _studentRepository = new StudentRepository(_S4DBContext);
             _studentClassRepository = new StudentClassRepository(_S4DBContext);
         }
-            public void BeginTransaction()
+        public void BeginTransaction()
         {
             _S4DBContext.Database.BeginTransaction();
         }
@@ -67,17 +68,17 @@ namespace s4.Data
             }
         }
 
-        public StudentClassRepository StudentClassRepository
+        public IStudentClassRepository StudentClassRepository
         {
             get { return _studentClassRepository; }
         }
 
-        public ClassRepository ClassRepository
+        public IClassRepository ClassRepository
         {
             get { return _classRepository; }
         }
 
-        public StudentRepository StudentRepository
+        public IStudentRepository StudentRepository
         {
             get { return _studentRepository; }
         }

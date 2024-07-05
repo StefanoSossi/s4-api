@@ -3,9 +3,9 @@ using System.Linq.Expressions;
 
 namespace s4.Data.Repository.Generic
 {
-    internal interface IGenericRepository<T> where T : Entity
+    public interface IGenericRepository<T> where T : Entity
     {
-        Task<T> GetByIdAsync(Guid id);
+        Task<T?> GetByIdAsync(Guid id);
 
         Task<IEnumerable<T>> GetAllAsync();
 
