@@ -16,37 +16,40 @@ namespace s4.Tests
         private readonly Mock<IUnitOfWork> _mockUow;
         private readonly Mock<IMapper> _mockMapper;
         private readonly Mock<IClassesManager> _mockClassesManager;
-        private readonly Mock<IStudentRepository> _mockStudentRepository;
-        private readonly Mock<IStudentClassRepository> _mockStudentClassRepository;
-        private readonly StudentManager _studentManager;
+        private readonly StudentsManager _studentManager;
         public StudentManagerTests()
         {
             _mockUow = new Mock<IUnitOfWork>();
             _mockMapper = new Mock<IMapper>();
             _mockClassesManager = new Mock<IClassesManager>();
-            _studentManager = new StudentManager(_mockUow.Object, _mockMapper.Object, _mockClassesManager.Object);
-            _mockStudentRepository = new Mock<IStudentRepository>();
-            _mockStudentClassRepository = new Mock<IStudentClassRepository>();
+            _studentManager = new StudentsManager(_mockUow.Object, _mockMapper.Object, _mockClassesManager.Object);
 
         }
 
         [Fact]
         public async Task GetAll_ShouldReturnAllStudents()
         {
+            var studentId1 = Guid.NewGuid();
+            var studentId2 = Guid.NewGuid();
             var students = new List<Student>
             {
-                new Student { Id = Guid.NewGuid(), FirstName = "John", LastName = "Doe" },
-                new Student { Id = Guid.NewGuid(), FirstName = "Jane", LastName = "Smith" }
+                new Student { Id = studentId1, FirstName = "John", LastName = "Doe" },
+                new Student { Id = studentId2, FirstName = "Jane", LastName = "Smith" }
+            };
+
+            var studentsDto = new List<StudentDto>
+            {
+                new StudentDto { Id = studentId1, FirstName = "John", LastName = "Doe", Classes = [] },
+                new StudentDto { Id = studentId2, FirstName = "Jane", LastName = "Smith", Classes = [] }
             };
 
             _mockUow.Setup(uow => uow.StudentRepository.GetAllAsync()).ReturnsAsync(students);
-            _mockMapper.Setup(m => m.Map<IEnumerable<StudentDto>>(It.IsAny<IEnumerable<Student>>()))
-                .Returns((IEnumerable<Student> source) => source.Select(s => new StudentDto { Id = s.Id, FirstName = s.FirstName, LastName = s.LastName }));
-
+            _mockMapper.Setup(m => m.Map<IEnumerable<StudentDto>>(It.IsAny<IEnumerable<Student>>())).Returns(studentsDto);
+            
             var result = await _studentManager.GetAll();
 
             Assert.NotNull(result);
-            Assert.Equal(2, result.Count());
+            Assert.Equal(2, result.ToList().Count());
             Assert.Equal("John", result.First().FirstName);
         }
 
@@ -55,10 +58,11 @@ namespace s4.Tests
         {
             var studentId = Guid.NewGuid();
             var student = new Student { Id = studentId, FirstName = "John", LastName = "Doe" };
+            var studentDto = new StudentDto { Id = studentId, FirstName = "John", LastName = "Doe", Classes = [] };
 
             _mockUow.Setup(uow => uow.StudentRepository.GetByIdAsync(studentId)).ReturnsAsync(student);
             _mockMapper.Setup(m => m.Map<StudentDto>(It.IsAny<Student>()))
-                .Returns((Student source) => new StudentDto { Id = source.Id, FirstName = source.FirstName, LastName = source.LastName });
+                .Returns(studentDto);
 
             var result = await _studentManager.GetById(studentId);
 
