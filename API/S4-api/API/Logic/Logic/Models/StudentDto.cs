@@ -1,5 +1,4 @@
-﻿using s4.Data.Models;
-using s4.Logic.Models.Validation;
+﻿using s4.Logic.Models.Validation;
 
 namespace s4.Logic.Models
 {
