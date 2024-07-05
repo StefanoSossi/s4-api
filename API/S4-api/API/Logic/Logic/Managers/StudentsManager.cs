@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
-using Logic.Managers.Interfaces;
+using s4.Logic.Managers.Interfaces;
 using s4.Data;
 using s4.Data.Models;
-using s4.Logic.Managers.Interfaces;
 using s4.Logic.Models;
+using System.Text.RegularExpressions;
 
 namespace s4.Logic.Managers
 {
-    public class StudentManager(IUnitOfWork uow, IMapper mapper, IClassesManager _classesManager) : IStudentManager
+    public class StudentsManager(IUnitOfWork uow, IMapper mapper, IClassesManager _classesManager) : IStudentManager
     {
         private readonly IUnitOfWork _uow = uow;
         private readonly IMapper _mapper = mapper;
@@ -16,6 +16,10 @@ namespace s4.Logic.Managers
         {
             IEnumerable<Student> student = await _uow.StudentRepository.GetAllAsync();
             IEnumerable<StudentDto> studentsDto = _mapper.Map<IEnumerable<StudentDto>>(student);
+            foreach (StudentDto studentDto in studentsDto)
+            {
+                studentDto.Classes = await RetriveClassesOfStudent(studentDto.Id);
+            }
             return studentsDto;
         }
 
@@ -24,6 +28,7 @@ namespace s4.Logic.Managers
             Student student = await _uow.StudentRepository.GetByIdAsync(id)
                 ?? throw new Exception($"Student with ID {id} not found");
             StudentDto studentDto = _mapper.Map<StudentDto>(student);
+            studentDto.Classes = await RetriveClassesOfStudent(studentDto.Id);
             return studentDto;
         }
 
@@ -33,14 +38,7 @@ namespace s4.Logic.Managers
             Student newStudent = _mapper.Map<Student>(studentDto);
             Student createResponse = await _uow.StudentRepository.CreateAsync(newStudent);
             StudentDto createdStudentDto = _mapper.Map<StudentDto>(createResponse);
-            IEnumerable<StudentClass> studentClasses = await _uow.StudentClassRepository.GetClassesOfStudent(createdStudentDto.Id);
-            List<ClassDto> classes = [];
-            foreach (StudentClass studentClass in studentClasses)
-            {
-                ClassDto classdto = await _classesManager.GetById(studentClass.ClassId);
-                classes.Add(classdto);
-            }
-            createdStudentDto.Classes = classes;
+            createdStudentDto.Classes = await RetriveClassesOfStudent(createdStudentDto.Id);
             return createdStudentDto;
         }
 
@@ -55,17 +53,9 @@ namespace s4.Logic.Managers
             studentToEdit.FirstName = editedstudent.FirstName;
             studentToEdit.LastName = editedstudent.LastName;
             studentToEdit = await _uow.StudentRepository.UpdateAsync(studentToEdit);
-
-            StudentDto studentEdited = _mapper.Map<StudentDto>(studentToEdit);
-            IEnumerable<StudentClass> studentClasses = await _uow.StudentClassRepository.GetClassesOfStudent(studentEdited.Id);
-            List<ClassDto> classes = [];
-            foreach (StudentClass studentClass in studentClasses)
-            {
-                ClassDto classdto = await _classesManager.GetById(studentClass.ClassId);
-                classes.Add(classdto);
-            }
-            studentEdited.Classes = classes;
-            return studentEdited;
+            StudentDto studentEditedDto = _mapper.Map<StudentDto>(studentToEdit);
+            studentEditedDto.Classes = await RetriveClassesOfStudent(studentEditedDto.Id);
+            return studentEditedDto;
         }
 
         public async Task<bool> Delete(Guid studentId)
@@ -77,24 +67,48 @@ namespace s4.Logic.Managers
             return await _uow.StudentRepository.GetByIdAsync(studentId) == null;
         }
 
-        public Task<StudentDto> AddClass(Guid classId, Guid studentId)
+        public async Task<StudentDto> AddClass(Guid classId, Guid studentId)
         {
-            return null;
+            Student student = await _uow.StudentRepository.GetByIdAsync(studentId)
+                ?? throw new Exception($"Student with ID {studentId} not found");
+            Class classItem = await _uow.ClassRepository.GetByIdAsync(classId)
+                ?? throw new Exception($"Class with ID {classId} not found");
+            StudentClass newStudentClass = new()
+            {
+                StudentId = studentId,
+                ClassId = classId
+            };
+            await _uow.StudentClassRepository.CreateAsync(newStudentClass);
+            StudentDto studentEditedDto = _mapper.Map<StudentDto>(student);
+            studentEditedDto.Classes = await RetriveClassesOfStudent(studentEditedDto.Id);
+            return studentEditedDto;
         }
-        public Task<StudentDto> RemoveClass(Guid classId, Guid studentId)
+        public async Task<StudentDto> RemoveClass(Guid classId, Guid studentId)
         {
-            return null;
+            Student student = await _uow.StudentRepository.GetByIdAsync(studentId)
+                ?? throw new Exception($"Student with ID {studentId} not found");
+            _ = await _uow.ClassRepository.GetByIdAsync(classId)
+                ?? throw new Exception($"Class with ID {classId} not found");
+            await _uow.StudentClassRepository.RemoveStudentOfClass(classId, studentId);
+            StudentDto studentEditedDto = _mapper.Map<StudentDto>(student);
+            studentEditedDto.Classes = await RetriveClassesOfStudent(studentEditedDto.Id);
+            return studentEditedDto;
         }
         public async Task<IEnumerable<ClassDto>> GetAllClasses(Guid studentId)
         {
             Student student = await _uow.StudentRepository.GetByIdAsync(studentId)
                 ?? throw new Exception($"Student with ID {studentId} not found");
+            return await RetriveClassesOfStudent(studentId);
+        }
+
+        private async Task<List<ClassDto>> RetriveClassesOfStudent(Guid studentId)
+        {
             IEnumerable<StudentClass> studentClasses = await _uow.StudentClassRepository.GetClassesOfStudent(studentId);
             List<ClassDto> classes = [];
             foreach (StudentClass studentClass in studentClasses)
             {
-                ClassDto classdto = await _classesManager.GetById(studentClass.ClassId);
-                classes.Add(classdto);
+                /*ClassDto classdto = await _classesManager.GetById(studentClass.ClassId);
+                classes.Add(classdto);*/
             }
             return classes;
         }

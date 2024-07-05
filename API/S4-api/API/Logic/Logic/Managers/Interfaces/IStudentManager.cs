@@ -1,6 +1,6 @@
 ﻿using s4.Logic.Models;
 
-namespace Logic.Managers.Interfaces
+namespace s4.Logic.Managers.Interfaces
 {
     public interface IStudentManager
     {

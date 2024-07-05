@@ -6,11 +6,12 @@ namespace s4.Logic.Models
 {
     public class ClassDto : ValidationData, IValidation 
     {
+        public Guid Id { get; set; }
         public Guid Code { get; set; }
         public required string Title { get; set; }
         public string? Description { get; set; }
 
-        public IEnumerable<StudentDto> Students { get; set; }
+        public IEnumerable<StudentDto>? Students { get; set; }
 
         public override bool IsValid()
         {

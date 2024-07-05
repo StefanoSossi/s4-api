@@ -2,7 +2,7 @@
 
 namespace s4.Logic.Managers.Interfaces
 {
-    internal interface IClassesManager
+    public interface IClassesManager
     {
         Task<IEnumerable<StudentDto>> GetAll();
         Task<StudentDto> GetById(Guid id);
