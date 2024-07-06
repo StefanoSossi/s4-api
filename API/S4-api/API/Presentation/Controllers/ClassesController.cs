@@ -157,7 +157,7 @@ namespace s4.Presentation.Controllers
         [ProducesResponseType(typeof(void), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(void), (int)HttpStatusCode.UnprocessableEntity)]
         [ProducesResponseType(typeof(void), (int)HttpStatusCode.Conflict)]
-        [HttpPut]
+        [HttpGet]
         [Route("student/{classId}")]
         public async Task<IActionResult> GetAllStudents([FromRoute] Guid classId)
         {

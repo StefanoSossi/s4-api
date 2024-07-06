@@ -32,6 +32,7 @@ namespace s4.Presentation
             builder.Services.AddDbContext<S4DBContext>(); 
             builder.Services.AddTransient<IStudentManager, StudentsManager>();
             builder.Services.AddTransient<IClassesManager, ClassesManager>();
+            builder.Services.AddTransient<IDataSeederManager, DataSeederManager>();
             builder.Services.AddTransient<IApplicationConfiguration, ApplicationConfiguration>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddSwaggerGen();
