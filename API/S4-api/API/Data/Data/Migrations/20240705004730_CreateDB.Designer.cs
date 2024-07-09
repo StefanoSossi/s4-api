@@ -12,14 +12,15 @@ using s4.Data;
 namespace Data.Migrations
 {
     [DbContext(typeof(S4DBContext))]
-    [Migration("20240703204011_FirstDB")]
-    partial class FirstDB
+    [Migration("20240705004730_CreateDB")]
+    partial class CreateDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasDefaultSchema("dbo")
                 .HasAnnotation("ProductVersion", "8.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
@@ -27,12 +28,14 @@ namespace Data.Migrations
 
             modelBuilder.Entity("s4.Data.Models.Class", b =>
                 {
-                    b.Property<Guid>("Code")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("Code")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
@@ -40,14 +43,15 @@ namespace Data.Migrations
                         .HasMaxLength(350)
                         .HasColumnType("nvarchar(350)");
 
-                    b.HasKey("Code");
+                    b.HasKey("Id")
+                        .HasName("PK_Class_Id");
 
-                    b.ToTable("Classes");
+                    b.ToTable("Classes", "dbo");
                 });
 
             modelBuilder.Entity("s4.Data.Models.Student", b =>
                 {
-                    b.Property<Guid>("id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -56,58 +60,57 @@ namespace Data.Migrations
                         .HasMaxLength(350)
                         .HasColumnType("nvarchar(350)");
 
-                    b.Property<string>("lastName")
-                        .IsRequired()
+                    b.Property<string>("LastName")
                         .HasMaxLength(350)
                         .HasColumnType("nvarchar(350)");
 
-                    b.HasKey("id");
+                    b.HasKey("Id")
+                        .HasName("PK_Student_Id");
 
-                    b.ToTable("Students");
+                    b.ToTable("Students", "dbo");
                 });
 
             modelBuilder.Entity("s4.Data.Models.StudentClass", b =>
                 {
-                    b.Property<Guid>("StudentId")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ClassId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("StudentId", "ClassId");
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id")
+                        .HasName("PK_StudentClass_Id");
 
                     b.HasIndex("ClassId");
 
-                    b.ToTable("StudentClasses");
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("StudentClasses", "dbo");
                 });
 
             modelBuilder.Entity("s4.Data.Models.StudentClass", b =>
                 {
                     b.HasOne("s4.Data.Models.Class", "Class")
-                        .WithMany("StudentClasses")
+                        .WithMany()
                         .HasForeignKey("ClassId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_StudentClass_ClassId");
 
                     b.HasOne("s4.Data.Models.Student", "Student")
-                        .WithMany("StudentClasses")
+                        .WithMany()
                         .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_StudentClass_StudentId");
 
                     b.Navigation("Class");
 
                     b.Navigation("Student");
-                });
-
-            modelBuilder.Entity("s4.Data.Models.Class", b =>
-                {
-                    b.Navigation("StudentClasses");
-                });
-
-            modelBuilder.Entity("s4.Data.Models.Student", b =>
-                {
-                    b.Navigation("StudentClasses");
                 });
 #pragma warning restore 612, 618
         }
