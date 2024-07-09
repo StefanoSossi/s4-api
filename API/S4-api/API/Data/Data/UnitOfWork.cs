@@ -16,15 +16,12 @@ namespace s4.Data
 
         private readonly IStudentClassRepository _studentClassRepository;
 
-        private readonly IDataSeederRepository _dataSeederRepository;
-
         public UnitOfWork(S4DBContext dbContext)
         {
             _S4DBContext = dbContext;
             _classRepository = new ClassRepository(_S4DBContext);
             _studentRepository = new StudentRepository(_S4DBContext);
             _studentClassRepository = new StudentClassRepository(_S4DBContext);
-            _dataSeederRepository = new DataSeederRepository(_S4DBContext);
         }
         public void BeginTransaction()
         {
@@ -84,11 +81,6 @@ namespace s4.Data
         public IStudentRepository StudentRepository
         {
             get { return _studentRepository; }
-        }
-
-        public IDataSeederRepository DataSeederRepository
-        {
-            get { return _dataSeederRepository; }
         }
     }
 }

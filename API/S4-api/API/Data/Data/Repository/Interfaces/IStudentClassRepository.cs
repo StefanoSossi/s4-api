@@ -9,6 +9,5 @@ namespace s4.Data.Repository.Interfaces
         Task<IEnumerable<StudentClass>> GetClassesOfStudent(Guid studentId);
         Task RemoveStudentOfClass(Guid classId, Guid studentId);
         Task RemoveStudentOfAllClasses(Guid studentId);
-        Task RemoveClassOfAllStudents(Guid classId);
     }
 }

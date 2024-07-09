@@ -2,9 +2,12 @@ using AutoMapper;
 using Moq;
 using s4.Data;
 using s4.Data.Models;
+using s4.Data.Repository.Interfaces;
+using s4.Data.Repository.Generic;
 using s4.Logic.Managers;
 using s4.Logic.Managers.Interfaces;
 using s4.Logic.Models;
+using s4.Data.Repository;
 
 namespace s4.Tests
 {
@@ -19,7 +22,7 @@ namespace s4.Tests
             _mockUow = new Mock<IUnitOfWork>();
             _mockMapper = new Mock<IMapper>();
             _mockClassesManager = new Mock<IClassesManager>();
-            _studentManager = new StudentsManager(_mockUow.Object, _mockMapper.Object);
+            _studentManager = new StudentsManager(_mockUow.Object, _mockMapper.Object, _mockClassesManager.Object);
 
         }
 
@@ -36,8 +39,8 @@ namespace s4.Tests
 
             var studentsDto = new List<StudentDto>
             {
-                new StudentDto { Id = studentId1, FirstName = "John", LastName = "Doe" },
-                new StudentDto { Id = studentId2, FirstName = "Jane", LastName = "Smith" }
+                new StudentDto { Id = studentId1, FirstName = "John", LastName = "Doe", Classes = [] },
+                new StudentDto { Id = studentId2, FirstName = "Jane", LastName = "Smith", Classes = [] }
             };
 
             _mockUow.Setup(uow => uow.StudentRepository.GetAllAsync()).ReturnsAsync(students);
@@ -55,7 +58,7 @@ namespace s4.Tests
         {
             var studentId = Guid.NewGuid();
             var student = new Student { Id = studentId, FirstName = "John", LastName = "Doe" };
-            var studentDto = new StudentDto { Id = studentId, FirstName = "John", LastName = "Doe" };
+            var studentDto = new StudentDto { Id = studentId, FirstName = "John", LastName = "Doe", Classes = [] };
 
             _mockUow.Setup(uow => uow.StudentRepository.GetByIdAsync(studentId)).ReturnsAsync(student);
             _mockMapper.Setup(m => m.Map<StudentDto>(It.IsAny<Student>()))

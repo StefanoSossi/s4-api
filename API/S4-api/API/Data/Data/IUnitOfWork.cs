@@ -8,7 +8,6 @@ namespace s4.Data
         IClassRepository ClassRepository { get; }
         IStudentRepository StudentRepository { get; }
         IStudentClassRepository StudentClassRepository { get; }
-        IDataSeederRepository DataSeederRepository { get; }
         void BeginTransaction();
         void CommitTransaction();
         void RollBackTransaction();

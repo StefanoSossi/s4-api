@@ -11,5 +11,6 @@ namespace s4.Logic.Managers.Interfaces
         Task<bool> Delete(Guid studentId);
         Task<StudentDto> AddClass(Guid classId, Guid studentId);
         Task<StudentDto> RemoveClass(Guid classId, Guid studentId);
+        Task<IEnumerable<ClassDto>> GetAllClasses(Guid studentId);
     }
 }

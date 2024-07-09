@@ -7,7 +7,7 @@ namespace s4.Data.Models
     public class Class : Entity
     {
         [Required]
-        public required string Code { get; set; }
+        public Guid Code { get; set; }
 
         [Required]
         [StringLength(350)]
