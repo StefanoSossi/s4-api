@@ -120,7 +120,7 @@ namespace s4.Presentation.Controllers
         [ProducesResponseType(typeof(void), (int)HttpStatusCode.UnprocessableEntity)]
         [ProducesResponseType(typeof(void), (int)HttpStatusCode.Conflict)]
         [HttpPost]
-        [Route("student")]
+        [Route("{classId}/student/{studentId}")]
         public async Task<IActionResult> AddStudentToClass([FromRoute] Guid studentId, [FromRoute] Guid classId)
         {
             ClassDto response = await _classManager.AddStudent(classId, studentId);
@@ -139,8 +139,8 @@ namespace s4.Presentation.Controllers
         [ProducesResponseType(typeof(void), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(void), (int)HttpStatusCode.UnprocessableEntity)]
         [ProducesResponseType(typeof(void), (int)HttpStatusCode.Conflict)]
-        [HttpPut]
-        [Route("student")]
+        [HttpDelete]
+        [Route("{classId}/student/{studentId}")]
         public async Task<IActionResult> RemoveStudentToClass([FromRoute] Guid studentId, [FromRoute] Guid classId)
         {
             ClassDto response = await _classManager.RemoveStudent(classId, studentId);
@@ -158,7 +158,7 @@ namespace s4.Presentation.Controllers
         [ProducesResponseType(typeof(void), (int)HttpStatusCode.UnprocessableEntity)]
         [ProducesResponseType(typeof(void), (int)HttpStatusCode.Conflict)]
         [HttpGet]
-        [Route("student/{classId}")]
+        [Route("{classId}/students")]
         public async Task<IActionResult> GetAllStudents([FromRoute] Guid classId)
         {
             IEnumerable<StudentDto> response = await _classManager.GetAllStudents(classId);

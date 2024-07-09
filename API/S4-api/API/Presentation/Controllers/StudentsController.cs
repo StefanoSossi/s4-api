@@ -28,7 +28,7 @@ namespace s4.Presentation.Controllers
         [ProducesResponseType(typeof(void), (int)HttpStatusCode.UnprocessableEntity)]
         [ProducesResponseType(typeof(void), (int)HttpStatusCode.Conflict)]
         [HttpGet]
-        public virtual async Task<IActionResult> GetAllCategories()
+        public virtual async Task<IActionResult> GetAllStudents()
         {
             return Ok(new MiddlewareResponse<IEnumerable<StudentDto>>(await _studentManager.GetAll()));
         }
@@ -105,6 +105,46 @@ namespace s4.Presentation.Controllers
         public virtual async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             return Ok(new MiddlewareResponse<bool>(await _studentManager.Delete(id)));
+        }
+
+        /// <summary>
+        /// Add Class with provided Id to the Stuednt of the provided Id.
+        /// </summary>
+        /// <param name="studentId">Id of the Student</param>
+        /// <param name="classId">Id of the Class</param>
+
+        [ProducesResponseType(typeof(void), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(void), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(void), (int)HttpStatusCode.InternalServerError)]
+        [ProducesResponseType(typeof(void), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(void), (int)HttpStatusCode.UnprocessableEntity)]
+        [ProducesResponseType(typeof(void), (int)HttpStatusCode.Conflict)]
+        [HttpPost]
+        [Route("{studentId}/class/{classId}")]
+        public async Task<IActionResult> AddClassToStudent([FromRoute] Guid studentId, [FromRoute] Guid classId)
+        {
+            StudentDto response = await _studentManager.AddClass(classId, studentId);
+            return Ok(new MiddlewareResponse<StudentDto>(response));
+        }
+
+        /// <summary>
+        /// Remove Class with provided Id of the Student of the provided Id.
+        /// </summary>
+        /// <param name="studentId">Id of the Student</param>
+        /// <param name="classId">Id of the Class</param>
+
+        [ProducesResponseType(typeof(void), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(void), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(void), (int)HttpStatusCode.InternalServerError)]
+        [ProducesResponseType(typeof(void), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(void), (int)HttpStatusCode.UnprocessableEntity)]
+        [ProducesResponseType(typeof(void), (int)HttpStatusCode.Conflict)]
+        [HttpDelete]
+        [Route("{studentId}/class/{classId}")]
+        public async Task<IActionResult> RemoveClassToStudent([FromRoute] Guid studentId, [FromRoute] Guid classId)
+        {
+            StudentDto response = await _studentManager.RemoveClass(classId, studentId);
+            return Ok(new MiddlewareResponse<StudentDto>(response));
         }
     }
 }
