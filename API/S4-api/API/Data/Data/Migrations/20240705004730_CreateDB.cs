@@ -6,78 +6,98 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Data.Migrations
 {
     /// <inheritdoc />
-    public partial class FirstDB : Migration
+    public partial class CreateDB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.EnsureSchema(
+                name: "dbo");
+
             migrationBuilder.CreateTable(
                 name: "Classes",
+                schema: "dbo",
                 columns: table => new
                 {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Code = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Classes", x => x.Code);
+                    table.PrimaryKey("PK_Class_Id", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Students",
+                schema: "dbo",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    lastName = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
                     FirstName = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Students", x => x.id);
+                    table.PrimaryKey("PK_Student_Id", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "StudentClasses",
+                schema: "dbo",
                 columns: table => new
                 {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     StudentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ClassId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_StudentClasses", x => new { x.StudentId, x.ClassId });
+                    table.PrimaryKey("PK_StudentClass_Id", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_StudentClasses_Classes_ClassId",
+                        name: "FK_StudentClass_ClassId",
                         column: x => x.ClassId,
+                        principalSchema: "dbo",
                         principalTable: "Classes",
-                        principalColumn: "Code",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_StudentClasses_Students_StudentId",
+                        name: "FK_StudentClass_StudentId",
                         column: x => x.StudentId,
+                        principalSchema: "dbo",
                         principalTable: "Students",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_StudentClasses_ClassId",
+                schema: "dbo",
                 table: "StudentClasses",
                 column: "ClassId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentClasses_StudentId",
+                schema: "dbo",
+                table: "StudentClasses",
+                column: "StudentId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "StudentClasses");
+                name: "StudentClasses",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "Classes");
+                name: "Classes",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "Students");
+                name: "Students",
+                schema: "dbo");
         }
     }
 }
