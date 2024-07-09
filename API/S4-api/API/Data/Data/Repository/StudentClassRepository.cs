@@ -38,5 +38,12 @@ namespace s4.Data.Repository
             var studentClass = studentClasses.SingleOrDefault(ug => ug.StudentId == studentId);
             if (studentClass != null) await DeleteAsync(studentClass);
         }
+
+        public async Task RemoveClassOfAllStudents(Guid classId)
+        {
+            var studentClasses = await GetAllAsync();
+            var studentClass = studentClasses.SingleOrDefault(ug => ug.ClassId == classId);
+            if (studentClass != null) await DeleteAsync(studentClass);
+        }
     }
 }

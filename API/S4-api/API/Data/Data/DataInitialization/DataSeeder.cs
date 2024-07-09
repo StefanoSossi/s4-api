@@ -13,8 +13,8 @@ namespace s4.Data.DataInitialization
         {
             return new List<Class>
             {
-                new Class { Code = new Guid("D74FEBBF-8D2A-4A18-9E7B-08DB4D6C094C"), Title = "Math", Description = "Fun Mathematics" },
-                new Class { Code = new Guid("8B4EB3A7-9F88-4A6D-9E7C-08DB4D6C094C"), Title = "Physic", Description = "Fun Physics" }
+                new Class { Code = "Math-01", Title = "Math", Description = "Fun Mathematics" },
+                new Class { Code = "Physic-01", Title = "Physic", Description = "Fun Physics" }
             };
         }
 
