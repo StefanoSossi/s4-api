@@ -1,3 +1,5 @@
+using s4.Configuration;
+using s4.Data;
 
 namespace s4.Presentation
 {
@@ -22,7 +24,8 @@ namespace s4.Presentation
                         .WithExposedHeaders("Authorization")
                 );
             });
-            
+            builder.Services.AddDbContext<S4DBContext>();
+            builder.Services.AddTransient<IApplicationConfiguration, ApplicationConfiguration>();
 
             var app = builder.Build();
 
