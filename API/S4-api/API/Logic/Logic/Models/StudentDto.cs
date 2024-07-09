@@ -1,5 +1,4 @@
-﻿using s4.Data.Models;
-using s4.Logic.Models.Validation;
+﻿using s4.Logic.Models.Validation;
 
 namespace s4.Logic.Models
 {
@@ -8,8 +7,6 @@ namespace s4.Logic.Models
         public Guid Id { get; set; }
         public string? LastName { get; set; }
         public required string FirstName { get; set; }
-
-        public IEnumerable<ClassDto>? Classes { get; set; }
 
         public override bool IsValid()
         {

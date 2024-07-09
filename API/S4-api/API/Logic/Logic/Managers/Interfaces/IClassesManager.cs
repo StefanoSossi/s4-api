@@ -4,14 +4,14 @@ namespace s4.Logic.Managers.Interfaces
 {
     public interface IClassesManager
     {
-        Task<IEnumerable<StudentDto>> GetAll();
-        Task<StudentDto> GetById(Guid id);
-        Task<StudentDto> Create(StudentDto newClass);
-        Task<StudentDto> Update(StudentDto clasUpdated, Guid id);
+        Task<IEnumerable<ClassDto>> GetAll();
+        Task<ClassDto> GetById(Guid id);
+        Task<ClassDto> Create(ClassDto newClassDto);
+        Task<ClassDto> Update(ClassDto clasUpdatedDto, Guid id);
         Task<bool> Delete(Guid classId);
-        Task<StudentDto> AddStudent(Guid classId, Guid studentId);
-        Task<StudentDto> RemoveStudent(Guid classId, Guid studentId);
-        Task<StudentDto> GetAllStudents(Guid classId, Guid studentId);
+        Task<ClassDto> AddStudent(Guid classId, Guid studentId);
+        Task<ClassDto> RemoveStudent(Guid classId, Guid studentId);
+        Task<IEnumerable<StudentDto>> GetAllStudents(Guid classId);
 
     }
 }

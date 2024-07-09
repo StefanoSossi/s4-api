@@ -12,8 +12,8 @@ using s4.Data;
 namespace Data.Migrations
 {
     [DbContext(typeof(S4DBContext))]
-    [Migration("20240705151207_FixErrorOnDB")]
-    partial class FixErrorOnDB
+    [Migration("20240705203640_CreatedDB")]
+    partial class CreatedDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,8 +32,9 @@ namespace Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("Code")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
