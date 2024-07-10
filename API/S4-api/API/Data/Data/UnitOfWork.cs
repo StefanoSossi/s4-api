@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using s4.Data.Repository;
-using s4.Data.Repository.Generic;
 using Serilog;
 using s4.Data.Repository.Interfaces;
+using s4.Data.Exceptions;
 
 namespace s4.Data
 {

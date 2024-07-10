@@ -1,16 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using s4.Data.Exceptions;
 using s4.Data.Models;
 using System.Linq.Expressions;
 
 namespace s4.Data.Repository.Generic
 {
-    public class DatabaseException : Exception
-    {
-        public DatabaseException(string message) : base(message) { }
-
-        public DatabaseException(string message, Exception innerException) : base(string.Format(message), innerException) { }
-    }
-
     public class GenericRepository<T> : IGenericRepository<T> where T : Entity
     {
         protected readonly S4DBContext dbContext;

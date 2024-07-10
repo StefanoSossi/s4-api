@@ -3,6 +3,8 @@ using s4.Logic.Managers.Interfaces;
 using s4.Data;
 using s4.Data.Models;
 using s4.Logic.Models;
+using s4.Logic.Exceptions;
+using s4.Presentation.Exceptions;
 
 namespace s4.Logic.Managers
 {
@@ -21,14 +23,14 @@ namespace s4.Logic.Managers
         public async Task<StudentDto> GetById(Guid id)
         {
             Student student = await _uow.StudentRepository.GetByIdAsync(id)
-                ?? throw new Exception($"Student with ID {id} not found");
+                ?? throw new NotFoundException($"Student with ID {id} not found");
             StudentDto studentDto = _mapper.Map<StudentDto>(student);
             return studentDto;
         }
 
         public async Task<StudentDto> Create(StudentDto studentDto)
         {
-            if(studentDto == null) throw new Exception("Fields should not be empty");
+            if(studentDto == null) throw new BadRequestException("Fields should not be empty");
             Student newStudent = _mapper.Map<Student>(studentDto);
             Student createResponse = await _uow.StudentRepository.CreateAsync(newStudent);
             StudentDto createdStudentDto = _mapper.Map<StudentDto>(createResponse);
@@ -37,11 +39,11 @@ namespace s4.Logic.Managers
 
         public async Task<StudentDto> Update(StudentDto studentDto, Guid id)
         {
-            if(studentDto == null) throw new Exception("Fields should not be empty");
-            if (!studentDto.IsValid()) throw new Exception("Invalid Name");
+            if(studentDto == null) throw new BadRequestException("Fields should not be empty");
+            if (!studentDto.IsValid()) throw new BadRequestException("Invalid Name");
 
             Student studentToEdit = await _uow.StudentRepository.GetByIdAsync(id)
-                ?? throw new Exception($"Student with id {id} not found");
+                ?? throw new NotFoundException($"Student with id {id} not found");
             StudentDto editedstudent = _mapper.Map<StudentDto>(studentDto);
             studentToEdit.FirstName = editedstudent.FirstName;
             studentToEdit.LastName = editedstudent.LastName;
@@ -53,7 +55,7 @@ namespace s4.Logic.Managers
         public async Task<bool> Delete(Guid studentId)
         {
             Student student = await _uow.StudentRepository.GetByIdAsync(studentId)
-                ?? throw new Exception($"Student with ID {studentId} not found");
+                ?? throw new NotFoundException($"Student with ID {studentId} not found");
             await _uow.StudentClassRepository.RemoveStudentOfAllClasses(studentId);
             await _uow.StudentRepository.DeleteAsync(student);
             return await _uow.StudentRepository.GetByIdAsync(studentId) == null;
@@ -62,9 +64,9 @@ namespace s4.Logic.Managers
         public async Task<StudentDto> AddClass(Guid classId, Guid studentId)
         {
             Student student = await _uow.StudentRepository.GetByIdAsync(studentId)
-                ?? throw new Exception($"Student with ID {studentId} not found");
+                ?? throw new NotFoundException($"Student with ID {studentId} not found");
             _ = await _uow.ClassRepository.GetByIdAsync(classId)
-                ?? throw new Exception($"Class with ID {classId} not found");
+                ?? throw new NotFoundException($"Class with ID {classId} not found");
             StudentClass newStudentClass = new()
             {
                 StudentId = studentId,
@@ -77,9 +79,9 @@ namespace s4.Logic.Managers
         public async Task<StudentDto> RemoveClass(Guid classId, Guid studentId)
         {
             Student student = await _uow.StudentRepository.GetByIdAsync(studentId)
-                ?? throw new Exception($"Student with ID {studentId} not found");
+                ?? throw new NotFoundException($"Student with ID {studentId} not found");
             _ = await _uow.ClassRepository.GetByIdAsync(classId)
-                ?? throw new Exception($"Class with ID {classId} not found");
+                ?? throw new NotFoundException($"Class with ID {classId} not found");
             await _uow.StudentClassRepository.RemoveStudentOfClass(classId, studentId);
             StudentDto studentEditedDto = _mapper.Map<StudentDto>(student);
             return studentEditedDto;

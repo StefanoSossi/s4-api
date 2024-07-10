@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using s4.Data;
 using s4.Data.Models;
+using s4.Logic.Exceptions;
 using s4.Logic.Managers.Interfaces;
 using s4.Logic.Models;
+using s4.Presentation.Exceptions;
 
 namespace s4.Logic.Managers
 {
@@ -23,14 +25,14 @@ namespace s4.Logic.Managers
         public async Task<ClassDto> GetById(Guid id)
         {
             Class classItem = await _uow.ClassRepository.GetByIdAsync(id)
-                ?? throw new Exception($"Class with ID {id} not found");
+                ?? throw new NotFoundException($"Class with ID {id} not found");
             ClassDto classDto = _mapper.Map<ClassDto>(classItem);
             classDto.Students = await RetriveStudentsOfClass(classDto.Id);
             return classDto;
         }
         public async Task<ClassDto> Create(ClassDto newClassDto)
         {
-            if (newClassDto == null) throw new Exception("Fields should not be empty");
+            if (newClassDto == null) throw new BadRequestException("Fields should not be empty");
             Class newClass = _mapper.Map<Class>(newClassDto);
             Class createResponse = await _uow.ClassRepository.CreateAsync(newClass);
             ClassDto createdClassDto = _mapper.Map<ClassDto>(createResponse);
@@ -39,11 +41,11 @@ namespace s4.Logic.Managers
         }
         public async Task<ClassDto> Update(ClassDto clasUpdatedDto, Guid id)
         {
-            if (clasUpdatedDto == null) throw new Exception("Fields should not be empty");
-            if (!clasUpdatedDto.IsValid()) throw new Exception("Invalid Name");
+            if (clasUpdatedDto == null) throw new BadRequestException("Fields should not be empty");
+            if (!clasUpdatedDto.IsValid()) throw new BadRequestException("Invalid Name");
 
             Class classToEdit = await _uow.ClassRepository.GetByIdAsync(id)
-                ?? throw new Exception($"Class with id {id} not found");
+                ?? throw new NotFoundException($"Class with id {id} not found");
             ClassDto editedClass = _mapper.Map<ClassDto>(clasUpdatedDto);
             classToEdit.Code = editedClass.Code;
             classToEdit.Description = editedClass.Description;
@@ -56,7 +58,7 @@ namespace s4.Logic.Managers
         public async Task<bool> Delete(Guid classId)
         {
             Class classItem = await _uow.ClassRepository.GetByIdAsync(classId)
-                ?? throw new Exception($"Student with ID {classId} not found");
+                ?? throw new NotFoundException($"Student with ID {classId} not found");
             await _uow.StudentClassRepository.RemoveClassOfAllStudents(classId);
             await _uow.ClassRepository.DeleteAsync(classItem);
             return await _uow.ClassRepository.GetByIdAsync(classId) == null;
@@ -64,9 +66,9 @@ namespace s4.Logic.Managers
         public async Task<ClassDto> AddStudent(Guid classId, Guid studentId)
         {
             Class classItem = await _uow.ClassRepository.GetByIdAsync(classId)
-                ?? throw new Exception($"Class with ID {classId} not found");
+                ?? throw new NotFoundException($"Class with ID {classId} not found");
             _ = await _uow.StudentRepository.GetByIdAsync(studentId)
-                ?? throw new Exception($"Student with ID {studentId} not found");
+                ?? throw new NotFoundException($"Student with ID {studentId} not found");
             StudentClass newStudentClass = new()
             {
                 StudentId = studentId,
@@ -80,9 +82,9 @@ namespace s4.Logic.Managers
         public async Task<ClassDto> RemoveStudent(Guid classId, Guid studentId)
         {
             Class classItem = await _uow.ClassRepository.GetByIdAsync(classId)
-                ?? throw new Exception($"Class with ID {classId} not found");
+                ?? throw new NotFoundException($"Class with ID {classId} not found");
             _ = await _uow.StudentRepository.GetByIdAsync(studentId)
-                ?? throw new Exception($"Student with ID {studentId} not found");
+                ?? throw new NotFoundException($"Student with ID {studentId} not found");
             await _uow.StudentClassRepository.RemoveStudentOfClass(classId, studentId);
             ClassDto classEditedDto = _mapper.Map<ClassDto>(classItem);
             classEditedDto.Students = await RetriveStudentsOfClass(classEditedDto.Id);
@@ -91,7 +93,7 @@ namespace s4.Logic.Managers
         public async Task<IEnumerable<StudentDto>> GetAllStudents(Guid classId)
         {
             _ = await _uow.ClassRepository.GetByIdAsync(classId)
-               ?? throw new Exception($"Class with ID {classId} not found");
+               ?? throw new NotFoundException($"Class with ID {classId} not found");
             return await RetriveStudentsOfClass(classId);
         }
 

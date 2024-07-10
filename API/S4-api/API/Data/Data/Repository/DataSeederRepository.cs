@@ -1,7 +1,7 @@
 ﻿
 using s4.Data.DataInitialization;
+using s4.Data.Exceptions;
 using s4.Data.Models;
-using s4.Data.Repository.Generic;
 using s4.Data.Repository.Interfaces;
 
 namespace s4.Data.Repository
